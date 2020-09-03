@@ -1,10 +1,23 @@
-﻿namespace StockTradingPlatform.Core.Model
+﻿using System;
+
+namespace StockTradingPlatform.Core.Model
 {
     /// <summary>
     ///     The model representing the order concept
     /// </summary>
     public class Order
     {
+        public Order(string companySymbol, int min, int max, int quantity, OrderType type)
+        {
+            CompanySymbol = companySymbol;
+            Min = min;
+            Max = max;
+            Quantity = quantity;
+            Type = type;
+        }
+
+        public Guid Id { get; set; }
+
         public string CompanySymbol { get; set; }
 
         public int Min { get; set; }

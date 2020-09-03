@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using StockTradingPlatform.Core.DataAccess;
 using StockTradingPlatform.Core.Model;
 
@@ -7,10 +8,12 @@ namespace StockTradingPlatform.Core.CoreLogic
     public class OrderService
     {
         private readonly OrderContext _orderContext;
+        private readonly CompanyContext _companyContext;
 
-        public OrderService(OrderContext orderContext)
+        public OrderService(OrderContext orderContext, CompanyContext companyContext)
         {
             _orderContext = orderContext;
+            _companyContext = companyContext;
         }
 
         public IEnumerable<Order> GetOrders()
@@ -18,15 +21,21 @@ namespace StockTradingPlatform.Core.CoreLogic
             return _orderContext.GetOrders();
         }
 
-        public Order GetOrder(string symbol)
+        public Order GetOrder(Guid id)
         {
-            return _orderContext.GetOrder(symbol);
+            return _orderContext.GetOrder(id);
         }
 
-        // TODO: Decide whether this should return the company. Nothing get's set on the company so the object doesn't change but it's probably a good idea
-        public void AddOrder(Order order)
+        
+        public Order AddOrder(Order order)
         {
-            _orderContext.AddOrder(order);
+            if (_companyContext.GetCompany(order.CompanySymbol) == null)
+            {
+                // TODO: This error message should be changes as its somewhat a security flaw. It could be abused to find out which companies are in the system
+                throw new Exception("Cannot create orders for a company that does not exist");
+            }
+
+            return _orderContext.AddOrder(order);
         }
     }
 }

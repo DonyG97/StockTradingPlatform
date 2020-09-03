@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StockTradingPlatform.Core.CoreLogic;
+using StockTradingPlatform.Core.DataAccess;
 
 namespace StockTradingPlatform.WebAPI
 {
@@ -18,6 +20,16 @@ namespace StockTradingPlatform.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // TODO: Create interfaces for this
+            services.AddSingleton<CompanyContext>();
+            services.AddSingleton<OrderContext>();
+            services.AddSingleton<CompanyService>();
+            services.AddSingleton<OrderService>();
+
+            services.AddHostedService<DemoDataService>();
+
+            // TODO: Add swagger in!
+
             services.AddControllers();
         }
 

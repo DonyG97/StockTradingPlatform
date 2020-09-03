@@ -14,18 +14,19 @@ namespace StockTradingPlatform.Core.DataAccess
             return _orders;
         }
 
-        public Order GetOrder(string symbol)
+        public Order GetOrder(Guid id)
         {
             // TODO: Error handling if the symbol does not match an existing order
 
             // TODO: Think about whether this needs to be case sensitive
-            return _orders.First(x =>
-                string.Equals(x.CompanySymbol, symbol, StringComparison.InvariantCultureIgnoreCase));
+            return _orders.FirstOrDefault(x => x.Id == id);
         }
 
-        public void AddOrder(Order order)
+        public Order AddOrder(Order order)
         {
+            order.Id = Guid.NewGuid();
             _orders.Add(order);
+            return order;
         }
     }
 }
