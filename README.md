@@ -53,7 +53,7 @@ No specific naming convention has been used, typically I would use the Gherkin s
 
 ## Outputs
 ### Documentation
-I have generated the API spec from the code. It can be found in [json format](https://github.com/DonyG97/StockTradingPlatform/blob/master/SwaggerSpec.json) or in [yaml format]((https://github.com/DonyG97/StockTradingPlatform/blob/master/SwaggerSpec.yaml)).
+I have generated the API spec from the code. It can be found in [json format](https://github.com/DonyG97/StockTradingPlatform/blob/master/SwaggerSpec.json) or in [yaml format](https://github.com/DonyG97/StockTradingPlatform/blob/master/SwaggerSpec.yaml).
 
 When the Web API is ran it will load the swagger UI by default so the user can 
 
