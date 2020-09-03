@@ -14,9 +14,12 @@ namespace StockTradingPlatform.Core.Model
             Max = max;
             Quantity = quantity;
             Type = type;
+            AmountRemaining = quantity;
         }
 
         public Guid Id { get; set; }
+
+        public DateTime Created { get; set; }
 
         public string CompanySymbol { get; set; }
 
@@ -28,7 +31,9 @@ namespace StockTradingPlatform.Core.Model
 
         public OrderType Type { get; set; }
 
-        public OrderStatus Status { get; set; }
+        public int AmountRemaining { get; set; }
+
+        public OrderStatus Status => AmountRemaining == 0 ? OrderStatus.Complete : OrderStatus.Processing;
     }
 
     /// <summary>

@@ -10,9 +10,6 @@ namespace StockTradingPlatform.Test
     [TestFixture]
     public class CompanyTests
     {
-        private CompanyService _companyService;
-        private OrderService _orderService;
-
         [SetUp]
         public void SetUp()
         {
@@ -23,6 +20,9 @@ namespace StockTradingPlatform.Test
             _companyService = new CompanyService(companyContext, orderContext);
             _orderService = new OrderService(orderContext, companyContext);
         }
+
+        private CompanyService _companyService;
+        private OrderService _orderService;
 
         [Test]
         public void GetCompanies_ReturnsAllCompanies()
@@ -59,8 +59,7 @@ namespace StockTradingPlatform.Test
         [Test] // Probably out of the scope of the challenge. Also it should probably check for an error being thrown and a 400
         public void WhenIssuingShares_ForACompanyThatDoesNotExist_AnExceptionIsThrownAndNoOrderIsCreated()
         {
-            
-            Assert.Throws<Exception>(() =>  _companyService.IssueShares("NEW", 20, 100));
+            Assert.Throws<Exception>(() => _companyService.IssueShares("NEW", 20, 100));
             Assert.AreEqual(0, _orderService.GetOrders().Count());
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using StockTradingPlatform.Core.CoreLogic;
 using StockTradingPlatform.Core.Model;
 
@@ -30,7 +29,7 @@ namespace StockTradingPlatform.WebAPI.Controllers
         {
             var orderToReturn = _orderService.GetOrder(id);
 
-            if (orderToReturn == null) HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            if (orderToReturn == null) HttpContext.Response.StatusCode = (int) HttpStatusCode.NotFound;
 
             return orderToReturn;
         }
@@ -38,8 +37,9 @@ namespace StockTradingPlatform.WebAPI.Controllers
         [HttpPost]
         public Order Post([FromBody] OrderRequest request)
         {
-            var addedOrder = _orderService.AddOrder(new Order(request.Symbol, request.MinPrice, request.MaxPrice, request.Quantity, request.OrderType));
-            if (addedOrder == null) HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            var addedOrder = _orderService.AddOrder(new Order(request.Symbol, request.MinPrice, request.MaxPrice,
+                request.Quantity, request.OrderType));
+            if (addedOrder == null) HttpContext.Response.StatusCode = (int) HttpStatusCode.BadRequest;
 
             return addedOrder;
         }

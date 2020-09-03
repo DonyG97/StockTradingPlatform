@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using StockTradingPlatform.Core.CoreLogic;
 using StockTradingPlatform.Core.Model;
 
@@ -28,7 +27,7 @@ namespace StockTradingPlatform.WebAPI.Controllers
         public Company Post([FromBody] Company company)
         {
             var returnCompany = _companyService.AddCompany(company);
-            HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
+            HttpContext.Response.StatusCode = (int) HttpStatusCode.Created;
             return company;
         }
 

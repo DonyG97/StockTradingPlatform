@@ -17,7 +17,8 @@ namespace StockTradingPlatform.Core.DataAccess
         public Company GetCompany(string symbol)
         {
             // TODO: Think about whether this needs to be case sensitive
-            return _companies.FirstOrDefault(x => string.Equals(x.Symbol, symbol, StringComparison.InvariantCultureIgnoreCase));
+            return _companies.FirstOrDefault(x =>
+                string.Equals(x.Symbol, symbol, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public Company AddCompany(Company company)

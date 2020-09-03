@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -9,7 +7,7 @@ using StockTradingPlatform.Core.Model;
 
 namespace StockTradingPlatform.WebAPI
 {
-    public class DemoDataService: IHostedService
+    public class DemoDataService : IHostedService
     {
         private readonly CompanyService _companyService;
         private readonly OrderService _orderService;
