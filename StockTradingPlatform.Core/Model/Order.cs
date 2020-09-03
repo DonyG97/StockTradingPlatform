@@ -7,11 +7,11 @@ namespace StockTradingPlatform.Core.Model
     /// </summary>
     public class Order
     {
-        public Order(string companySymbol, int min, int max, int quantity, OrderType type)
+        public Order(string companySymbol, decimal minPrice, decimal maxPrice, int quantity, OrderType type)
         {
             CompanySymbol = companySymbol;
-            Min = min;
-            Max = max;
+            MinPrice = minPrice;
+            MaxPrice = maxPrice;
             Quantity = quantity;
             Type = type;
             AmountRemaining = quantity;
@@ -23,9 +23,9 @@ namespace StockTradingPlatform.Core.Model
 
         public string CompanySymbol { get; set; }
 
-        public int Min { get; set; }
+        public decimal MinPrice { get; set; }
 
-        public int Max { get; set; }
+        public decimal MaxPrice { get; set; }
 
         public int Quantity { get; set; }
 

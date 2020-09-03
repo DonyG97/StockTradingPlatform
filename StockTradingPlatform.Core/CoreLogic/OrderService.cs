@@ -17,9 +17,14 @@ namespace StockTradingPlatform.Core.CoreLogic
             _companyContext = companyContext;
         }
 
-        public IEnumerable<Order> GetOrders()
+        public IEnumerable<Order> GetIncompleteOrders()
         {
-            return _orderContext.GetOrders();
+            return _orderContext.GetOrders().Where(x => x.Status != OrderStatus.Complete);
+        }
+
+        public IEnumerable<Order> GetCompleteOrders()
+        {
+            return _orderContext.GetOrders().Where(x => x.Status == OrderStatus.Complete);
         }
 
         public Order GetOrder(Guid id)
@@ -45,7 +50,14 @@ namespace StockTradingPlatform.Core.CoreLogic
 
         private void ProcessNewOrder(Order newOrder, Company company)
         {
-            if (company.RemainingNumberOfShares == 0) return;
+            if (ProcessShareQuantities(newOrder, company)) return;
+
+            _orderContext.UpdateOrder(newOrder);
+        }
+
+        private static bool ProcessShareQuantities(Order newOrder, Company company)
+        {
+            if (company.RemainingNumberOfShares == 0) return true;
 
             // If the company has enough shares remaining then fulfill the order
             if (company.RemainingNumberOfShares >= newOrder.AmountRemaining)
@@ -59,7 +71,7 @@ namespace StockTradingPlatform.Core.CoreLogic
                 company.RemainingNumberOfShares = 0;
             }
 
-            _orderContext.UpdateOrder(newOrder);
+            return false;
         }
 
         private void ProcessExistingOrders(Order order, Company company)
@@ -67,24 +79,12 @@ namespace StockTradingPlatform.Core.CoreLogic
             var companyOrders = _orderContext.GetOrders()
                 .Where(x => string.Equals(x.CompanySymbol, order.CompanySymbol));
             var unprocessedOrders = companyOrders.Where(x => x.Status == OrderStatus.Processing);
-            var ordersWithinPriceRange = unprocessedOrders.Where(x => x.Min >= order.Min && x.Max <= order.Max);
+            var ordersWithinPriceRange = unprocessedOrders.Where(x => x.MinPrice >= order.MinPrice && x.MaxPrice <= order.MaxPrice);
 
             // We need to check the orders in created time ascending order
             foreach (var existingOrder in ordersWithinPriceRange.OrderBy(x => x.Created))
             {
-                if (company.RemainingNumberOfShares == 0) return;
-
-                // If the company has enough shares remaining then fulfill the order
-                if (company.RemainingNumberOfShares >= existingOrder.AmountRemaining)
-                {
-                    company.RemainingNumberOfShares -= existingOrder.AmountRemaining;
-                    existingOrder.AmountRemaining = 0;
-                }
-                else
-                {
-                    existingOrder.AmountRemaining -= company.RemainingNumberOfShares;
-                    company.RemainingNumberOfShares = 0;
-                }
+                if (ProcessShareQuantities(existingOrder, company)) return;
 
                 _orderContext.UpdateOrder(existingOrder);
             }

@@ -1,0 +1,283 @@
+openapi: 3.0.1
+info:
+  title: StockTradingPlatform.WebAPI
+  version: '1.0'
+paths:
+  /api/Company:
+    get:
+      tags:
+        - Company
+      summary: Gets all companies
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+    post:
+      tags:
+        - Company
+      summary: Creates a company
+      requestBody:
+        description: The company you want to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Company'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+  '/api/Company/{companySymbol}/shares':
+    post:
+      tags:
+        - Company
+      summary: Issues shares for a company
+      parameters:
+        - name: companySymbol
+          in: path
+          description: The symbol of the company you wish to issue shares for
+          required: true
+          schema:
+            type: string
+            description: The symbol of the company you wish to issue shares for
+            nullable: true
+      requestBody:
+        description: The StockTradingPlatform.WebAPI.SharesRequest SharesRequest object of the shares you wish to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SharesRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SharesRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SharesRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Order'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /api/Order:
+    get:
+      tags:
+        - Order
+      summary: Get's all incomplete orders
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      tags:
+        - Order
+      summary: Creates an order
+      requestBody:
+        description: The StockTradingPlatform.WebAPI.OrderRequest OrderRequest you wish to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Order'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /api/Order/complete:
+    get:
+      tags:
+        - Order
+      summary: Get's all complete orders
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  '/api/Order/{id}':
+    get:
+      tags:
+        - Order
+      summary: Get an existing order by id
+      parameters:
+        - name: id
+          in: path
+          description: The guid of the order you want to retrieve
+          required: true
+          schema:
+            type: string
+            description: The guid of the order you want to retrieve
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Order'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+components:
+  schemas:
+    Company:
+      type: object
+      properties:
+        symbol:
+          type: string
+          nullable: true
+        totalNumberOfShares:
+          type: integer
+          format: int32
+        remainingNumberOfShares:
+          type: integer
+          format: int32
+      additionalProperties: false
+    SharesRequest:
+      type: object
+      properties:
+        price:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+      additionalProperties: false
+    OrderType:
+      enum:
+        - Buy
+        - Sell
+      type: string
+    OrderStatus:
+      enum:
+        - Processing
+        - Complete
+      type: string
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        created:
+          type: string
+          format: date-time
+        companySymbol:
+          type: string
+          nullable: true
+        min:
+          type: integer
+          format: int32
+        max:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/OrderType'
+        amountRemaining:
+          type: integer
+          format: int32
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+      additionalProperties: false
+    OrderRequest:
+      type: object
+      properties:
+        symbol:
+          type: string
+          nullable: true
+        minPrice:
+          type: integer
+          format: int32
+        maxPrice:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        orderType:
+          $ref: '#/components/schemas/OrderType'
+      additionalProperties: false

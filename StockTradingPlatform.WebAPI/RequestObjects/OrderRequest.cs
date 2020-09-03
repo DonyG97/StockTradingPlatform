@@ -8,9 +8,9 @@ namespace StockTradingPlatform.WebAPI
 
         public string Symbol { get; set; }
 
-        public int MinPrice { get; set; }
+        public decimal MinPrice { get; set; }
 
-        public int MaxPrice { get; set; }
+        public decimal MaxPrice { get; set; }
 
         public int Quantity { get; set; }
 

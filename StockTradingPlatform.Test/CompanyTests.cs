@@ -34,7 +34,7 @@ namespace StockTradingPlatform.Test
         public void WhenACompanyIsFirstCreated_ItHasNoShares()
         {
             _companyService.AddCompany(new Company("NEW"));
-            Assert.AreEqual(0, _orderService.GetOrders().Count());
+            Assert.AreEqual(0, _orderService.GetIncompleteOrders().Count());
         }
 
         [Test] // Probably out of the scope of the challenge but this should throw a custom error to explain what happened
@@ -60,14 +60,15 @@ namespace StockTradingPlatform.Test
         public void WhenIssuingShares_ForACompanyThatDoesNotExist_AnExceptionIsThrownAndNoOrderIsCreated()
         {
             Assert.Throws<Exception>(() => _companyService.IssueShares("NEW", 20, 100));
-            Assert.AreEqual(0, _orderService.GetOrders().Count());
+            Assert.AreEqual(0, _orderService.GetIncompleteOrders().Count());
         }
 
         [Test]
-        public void WhenIssuingShares_ForAnExistingCompany_AnOrderIsCreated()
+        public void WhenIssuingShares_ForAnExistingCompany_AnOrderIsCreatedAndCompleted()
         {
             var order = _companyService.IssueShares("TEST", 20, 100);
-            Assert.AreEqual(1, _orderService.GetOrders().Count());
+            Assert.AreEqual(1, _orderService.GetCompleteOrders().Count());
+            Assert.AreEqual(0, _orderService.GetIncompleteOrders().Count());
             Assert.IsNotNull(order);
         }
     }
